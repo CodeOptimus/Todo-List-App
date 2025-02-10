@@ -1,3 +1,5 @@
+import PropTypes from 'prop-types';
+
 function Todo(props) {
     return(
         <li className="todo stack-small">
@@ -18,5 +20,11 @@ function Todo(props) {
         </li>
     )
 }
+
+Todo.propTypes = {
+  id: PropTypes.string.isRequired, 
+  completed: PropTypes.bool.isRequired, 
+  name: PropTypes.string.isRequired,
+};
 
 export default Todo;

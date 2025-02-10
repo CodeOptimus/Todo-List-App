@@ -1,45 +1,34 @@
+import { useState } from "react";
 import Todo from "./components/Todo";
+import Form from "./components/Form";
+import FilterButton from "./components/FilterButton";
+import PropTypes from "prop-types";
 
 function App(props) {
-  const taskList = props.tasks?.map((task, id) => (
-    <Todo id={task.id} name={task.name} completed={task.completed} key={id} />
+  const [tasks, setTasks] = useState(props.tasks);
+
+  function addTask(name) {
+    const newTask = { id: "id", name, completed: false };
+    setTasks([...tasks, newTask]);
+  }
+
+  const taskList = tasks?.map((task) => (
+    <Todo
+      id={task.id}
+      name={task.name}
+      completed={task.completed}
+      key={task.id}
+    />
   ));
   return (
     <div className="todoapp stack-large">
       <h1>Todo Mate</h1>
-      <form action="">
-        <h2 className="label-wrapper">
-          <label htmlFor="newTodoInput" className="label__lg">
-            What needs to be done?
-          </label>
-        </h2>
-        <input
-          type="text"
-          id="newTodoInput"
-          className="input input__lg"
-          name="text"
-          autoComplete="off"
-        />
-        <button type="submit" className="btn btn__primary btn__lg">
-          Add
-        </button>
-      </form>
+      <Form addTask={addTask} />
+
       <div className="filters btn-group stack-exception">
-        <button type="button" className="btn toggle-btn" aria-pressed="true">
-          <span className="visually-hidden">Show</span>
-          <span>All</span>
-          <span className="visually-hidden">Tasks</span>
-        </button>
-        <button type="button" className="btn toggle-btn" aria-pressed="false">
-          <span className="visually-hidden">Show</span>
-          <span>Active</span>
-          <span className="visually-hidden">Tasks</span>
-        </button>
-        <button type="button" className="btn toggle-btn" aria-pressed="false">
-          <span className="visually-hidden">Show</span>
-          <span>Completed</span>
-          <span className="visually-hidden">Tasks</span>
-        </button>
+        <FilterButton />
+        <FilterButton />
+        <FilterButton />
       </div>
       <h2 id="list-heading">3 tasks remaining</h2>
       <ul
@@ -56,5 +45,15 @@ function App(props) {
     </div>
   );
 }
+
+App.propTypes = {
+  tasks: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.string.isRequired,
+      name: PropTypes.string.isRequired,
+      completed: PropTypes.bool.isRequired,
+    })
+  ).isRequired,
+};
 
 export default App;
