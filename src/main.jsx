@@ -10,12 +10,12 @@ const DATA = [
     completed: "true"
   },
   {
-    id:"todo-0",
+    id:"todo-1",
     name: "sleep",
     completed: "false"
   },
   {
-    id:"todo-0",
+    id:"todo-2",
     name: "repeat",
     completed: "false"
   },
