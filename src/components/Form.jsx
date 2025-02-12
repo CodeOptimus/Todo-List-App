@@ -6,25 +6,25 @@ function Form(props) {
 
   function handleChange(event) {
     setName(event.target.value);
-    props.addTask(name)
+    // props.addTask(name)
   }
 
   function handleSubmit(event) {
     event.preventDefault();
     props.addTask(name);
-    setName("")
+    setName("");
   }
 
   return (
     <form onSubmit={handleSubmit}>
       <h2 className="label-wrapper">
-        <label htmlFor="newTodoInput" className="label__lg">
+        <label htmlFor="new-todo-input" className="label__lg">
           What needs to be done?
         </label>
       </h2>
       <input
         type="text"
-        id="newTodoInput"
+        id="new-todo-input"
         className="input input__lg"
         name="text"
         autoComplete="off"
@@ -37,6 +37,8 @@ function Form(props) {
     </form>
   );
 }
+
+
 
 Form.propTypes = {
   addTask: PropTypes.func.isRequired,

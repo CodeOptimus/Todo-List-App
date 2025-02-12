@@ -5,15 +5,25 @@ import FilterButton from "./components/FilterButton";
 import PropTypes from "prop-types";
 import { nanoid } from "nanoid";
 
+
+
+const FILTER_MAP = {
+  All:()=>true,
+  Active:(task) => !task.completed,
+  Completed: (task) => task.completed,
+}
+const FILTER_NAMES = Object.keys(FILTER_MAP);
+
 function App(props) {
   const [tasks, setTasks] = useState(props.tasks);
+  const [filter, setFilter] = useState("All");
 
   function toggleTaskCompleted(id) {
     const updatedTasks = tasks.map((task) => {
       if (id === task.id) {
         return { ...task, completed: !task.completed };
       }
-      return tasks;
+      return task;
     });
     setTasks(updatedTasks);
   }
@@ -38,7 +48,9 @@ function App(props) {
     setTasks(editedTaskList)
   }
 
-  const taskList = tasks?.map((task) => (
+  const taskList = tasks
+  .filter(FILTER_MAP[filter])
+  .map((task) => (
     <Todo
       id={task.id}
       name={task.name}
@@ -50,6 +62,15 @@ function App(props) {
     />
   ));
 
+  const filteredList = FILTER_NAMES.map((name) => (
+    <FilterButton
+     key={name}
+     name={name}
+     isPressed={name === filter}
+     setFilter={setFilter}
+     />
+  ))
+
   const tasksNoun = taskList.length <= 1 ? "task" : "tasks";
 
   const headingText = `${taskList.length} ${tasksNoun} remaining`;
@@ -60,16 +81,10 @@ function App(props) {
       <Form addTask={addTask} />
 
       <div className="filters btn-group stack-exception">
-        <FilterButton />
-        <FilterButton />
-        <FilterButton />
+        {filteredList}
       </div>
       <h2 id="list-heading">{headingText}</h2>
-      <ul
-        role="list"
-        className="todo-list stack-large stack-exception"
-        aria-labelledby="list-heading"
-      >
+      <ul role="list" className="todo-list stack-large stack-exception" aria-labelledby="list-heading">
         {taskList}
       </ul>
     </div>
@@ -82,6 +97,7 @@ App.propTypes = {
       id: PropTypes.string.isRequired,
       name: PropTypes.string.isRequired,
       completed: PropTypes.bool.isRequired,
+
     })
   ).isRequired,
 };
